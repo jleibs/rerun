@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["F32RowPadded",""],["Mat3",""],["Mat4",""],["Mat4x3",""],["PaddingRow","A Vec4 of pure padding (i.e. 16 bytes of padding)"],["U32RowPadded",""],["Vec2",""],["Vec2RowPadded",""],["Vec3RowPadded",""],["Vec3Unpadded",""],["Vec4",""]]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["Painter","Everything you need to paint egui with [`wgpu`] on [`winit`]."]]};

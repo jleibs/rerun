@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["BallScatterer","Positions circles on a horizontal line with some vertical scattering to avoid overlap."]]};

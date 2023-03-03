@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":[["accounting_allocator","Track allocations and memory use."],["allocation_tracker",""],["memory_history",""],["memory_limit",""],["memory_use",""],["util",""]],"struct":[["CountAndSize","Number of allocation and their total size."],["MemoryHistory","Tracks memory use over time."],["MemoryLimit",""],["MemoryUse",""]]};

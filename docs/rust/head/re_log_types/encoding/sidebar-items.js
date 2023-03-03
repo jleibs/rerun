@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["encode",""],["warn_on_version_mismatch",""]],"mod":[["encoder",""]],"struct":[["Decoder",""],["Encoder","Encode a stream of [`LogMsg`] into an `.rrd` file."]]};

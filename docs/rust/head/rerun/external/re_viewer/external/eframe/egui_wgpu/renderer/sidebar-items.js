@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["CallbackFn","A callback function that can be used to compose an [`epaint::PaintCallback`] for custom WGPU rendering."],["Renderer","Renderer for a egui based GUI."],["ScreenDescriptor","Information about the screen used for rendering."]]};

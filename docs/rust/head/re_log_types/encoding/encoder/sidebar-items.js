@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["encode",""]],"struct":[["Encoder","Encode a stream of [`LogMsg`] into an `.rrd` file."]]};

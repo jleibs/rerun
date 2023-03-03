@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":[["mesh_vertices","Defines how mesh vertices are built."]],"struct":[["Material",""],["Mesh",""]]};
