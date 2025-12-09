@@ -1,6 +1,7 @@
 # Rerun architecture
 
 FOO BAR
+Mum
 
 This document describes the technical architecture of Rerun.
 
