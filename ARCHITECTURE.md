@@ -1,5 +1,7 @@
 # Rerun architecture
 
+Jeremy was here
+
 This document describes the technical architecture of Rerun.
 
 ## See also
