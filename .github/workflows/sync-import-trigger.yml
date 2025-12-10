@@ -103,11 +103,3 @@ jobs:
             -f "client_payload[triggered_by]=${{ github.event.comment.user.login }}" \
             --raw-field "client_payload[pr_body]=$(cat /tmp/pr_body.txt)"
 
-      - name: Post acknowledgment
-        if: steps.check-member.outputs.authorized == 'true'
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          gh pr comment ${{ github.event.issue.number }} \
-            --repo ${{ github.repository }} \
-            --body "Import triggered by @${{ github.event.comment.user.login }}. A mirror PR will be created in [universe](https://github.com/jleibs/universe)."
