@@ -1,4 +1,4 @@
-name: Sync Import Trigger
+name: PR Trigger Universe Import
 
 on:
   issue_comment:
@@ -89,11 +89,9 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          # Read PR body from file and escape for JSON
-          PR_BODY=$(cat /tmp/pr_body.txt | jq -Rs '.')
-
           gh api repos/jleibs/universe/dispatches \
-            -f event_type=rerun-import \
+            -f event_type=sync-import-pr \
+            -f "client_payload[repo]=rerun" \
             -f "client_payload[pr_number]=${{ steps.pr-details.outputs.pr_number }}" \
             -f "client_payload[head_ref]=${{ steps.pr-details.outputs.head_ref }}" \
             -f "client_payload[head_owner]=${{ steps.pr-details.outputs.head_owner }}" \
