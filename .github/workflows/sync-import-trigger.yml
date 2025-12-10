@@ -1,0 +1,95 @@
+name: Sync Import Trigger
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  trigger-import:
+    # Only run on PR comments (not issue comments)
+    # Only run if comment contains the trigger phrase
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@rerun-bot run-sync-ci')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.TEST_SYNC_APP_ID }}
+          private-key: ${{ secrets.TEST_SYNC_APP_PRIVATE_KEY }}
+          owner: jleibs
+          repositories: |
+            universe
+            rerun
+
+      - name: Check if commenter is org member
+        id: check-member
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          COMMENTER="${{ github.event.comment.user.login }}"
+          ORG="${{ github.repository_owner }}"
+          # Check if user is a member of the org that owns this repo
+          # This returns 204 for members, 404 for non-members
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/orgs/$ORG/members/$COMMENTER")
+
+          if [ "$HTTP_CODE" = "204" ]; then
+            echo "authorized=true" >> $GITHUB_OUTPUT
+            echo "User $COMMENTER is authorized"
+          else
+            echo "authorized=false" >> $GITHUB_OUTPUT
+            echo "User $COMMENTER is NOT authorized (HTTP $HTTP_CODE)"
+          fi
+
+      - name: Post unauthorized message
+        if: steps.check-member.outputs.authorized == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh pr comment ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --body "Sorry, only organization members can trigger the sync CI."
+
+      - name: Get PR details
+        if: steps.check-member.outputs.authorized == 'true'
+        id: pr-details
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          PR_DATA=$(gh pr view ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --json headRefName,headRepositoryOwner,headRepository,number,title,body)
+
+          echo "pr_number=$(echo "$PR_DATA" | jq -r '.number')" >> $GITHUB_OUTPUT
+          echo "head_ref=$(echo "$PR_DATA" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+          echo "head_owner=$(echo "$PR_DATA" | jq -r '.headRepositoryOwner.login')" >> $GITHUB_OUTPUT
+          echo "head_repo=$(echo "$PR_DATA" | jq -r '.headRepository.name')" >> $GITHUB_OUTPUT
+          echo "pr_title=$(echo "$PR_DATA" | jq -r '.title')" >> $GITHUB_OUTPUT
+
+      - name: Trigger universe import workflow
+        if: steps.check-member.outputs.authorized == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh api repos/jleibs/universe/dispatches \
+            -f event_type=rerun-import \
+            -f "client_payload[pr_number]=${{ steps.pr-details.outputs.pr_number }}" \
+            -f "client_payload[head_ref]=${{ steps.pr-details.outputs.head_ref }}" \
+            -f "client_payload[head_owner]=${{ steps.pr-details.outputs.head_owner }}" \
+            -f "client_payload[head_repo]=${{ steps.pr-details.outputs.head_repo }}" \
+            -f "client_payload[pr_title]=${{ steps.pr-details.outputs.pr_title }}" \
+            -f "client_payload[triggered_by]=${{ github.event.comment.user.login }}"
+
+      - name: Post acknowledgment
+        if: steps.check-member.outputs.authorized == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh pr comment ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --body "Import triggered by @${{ github.event.comment.user.login }}. A mirror PR will be created in [universe](https://github.com/jleibs/universe)."
