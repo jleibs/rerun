@@ -24,26 +24,27 @@ jobs:
             universe
             rerun
 
-      - name: Check if commenter is org member
+      - name: Check if commenter has write access
         id: check-member
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           COMMENTER="${{ github.event.comment.user.login }}"
-          ORG="${{ github.repository_owner }}"
-          # Check if user is a member of the org that owns this repo
-          # This returns 204 for members, 404 for non-members
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/orgs/$ORG/members/$COMMENTER")
+          REPO="${{ github.repository }}"
 
-          if [ "$HTTP_CODE" = "204" ]; then
+          # Check if user has write or admin permission on this repo
+          # This works for both user-owned and org-owned repositories
+          PERMISSION=$(gh api "repos/$REPO/collaborators/$COMMENTER/permission" \
+            --jq '.permission' 2>/dev/null || echo "none")
+
+          echo "User $COMMENTER has permission: $PERMISSION"
+
+          if [ "$PERMISSION" = "admin" ] || [ "$PERMISSION" = "write" ]; then
             echo "authorized=true" >> $GITHUB_OUTPUT
-            echo "User $COMMENTER is authorized"
+            echo "User $COMMENTER is authorized (permission: $PERMISSION)"
           else
             echo "authorized=false" >> $GITHUB_OUTPUT
-            echo "User $COMMENTER is NOT authorized (HTTP $HTTP_CODE)"
+            echo "User $COMMENTER is NOT authorized (permission: $PERMISSION)"
           fi
 
       - name: Post unauthorized message
