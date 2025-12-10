@@ -72,11 +72,26 @@ jobs:
           echo "head_repo=$(echo "$PR_DATA" | jq -r '.headRepository.name')" >> $GITHUB_OUTPUT
           echo "pr_title=$(echo "$PR_DATA" | jq -r '.title')" >> $GITHUB_OUTPUT
 
+          # Store body in file (handles multiline and special characters)
+          echo "$PR_DATA" | jq -r '.body // ""' > /tmp/pr_body.txt
+
+          # Determine if this is from a fork
+          # Compare head repo with the repo where this action is running
+          HEAD_FULL="${{ github.event.client_payload.head_owner }}/${{ github.event.client_payload.head_repo }}"
+          if [ "$(echo "$PR_DATA" | jq -r '.headRepositoryOwner.login')/$(echo "$PR_DATA" | jq -r '.headRepository.name')" = "${{ github.repository }}" ]; then
+            echo "is_fork=false" >> $GITHUB_OUTPUT
+          else
+            echo "is_fork=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Trigger universe import workflow
         if: steps.check-member.outputs.authorized == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          # Read PR body from file and escape for JSON
+          PR_BODY=$(cat /tmp/pr_body.txt | jq -Rs '.')
+
           gh api repos/jleibs/universe/dispatches \
             -f event_type=rerun-import \
             -f "client_payload[pr_number]=${{ steps.pr-details.outputs.pr_number }}" \
@@ -84,7 +99,9 @@ jobs:
             -f "client_payload[head_owner]=${{ steps.pr-details.outputs.head_owner }}" \
             -f "client_payload[head_repo]=${{ steps.pr-details.outputs.head_repo }}" \
             -f "client_payload[pr_title]=${{ steps.pr-details.outputs.pr_title }}" \
-            -f "client_payload[triggered_by]=${{ github.event.comment.user.login }}"
+            -f "client_payload[is_fork]=${{ steps.pr-details.outputs.is_fork }}" \
+            -f "client_payload[triggered_by]=${{ github.event.comment.user.login }}" \
+            --raw-field "client_payload[pr_body]=$(cat /tmp/pr_body.txt)"
 
       - name: Post acknowledgment
         if: steps.check-member.outputs.authorized == 'true'
