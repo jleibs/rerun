@@ -3,7 +3,7 @@ This is written for anyone who wants to contribute to the Rerun repository.j
 
 I want to make a bigger change.
 
-Something something about contributing.
+Something something about contributing in a visible fashion.
 
 ## See also
 * [`ARCHITECTURE.md`](ARCHITECTURE.md)
