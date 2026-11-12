@@ -1,0 +1,13 @@
+crates/viewer_support/re_time_ruler/src/lib.rs
+  ai_agent 11-12,24
+crates/viewer_support/re_time_ruler/src/time_selection_ui.rs
+  ai_agent 11-15,104,421
+crates/panels/re_time_panel/src/time_panel.rs
+  ai_agent 35,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "c77e5d1aabaa6eb0c69f7a25d90c8d9116ee2188",
+  "prompts": {}
+}
