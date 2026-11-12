@@ -1,0 +1,29 @@
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_context_menu.png
+  ai_agent 1-3
+crates/views/re_view_state_timeline/src/view_class.rs
+  s_adb8b4a94100e1::t_9acd6199e0ffbb 6,104,508-510,517-522,529-537,539-544,960-979,982-999
+  s_adb8b4a94100e1::t_c02e81054e21ef 107
+  s_adb8b4a94100e1::t_bcb1a9fa986adb 108
+  s_adb8b4a94100e1::t_2c15b95e63c864 438-441
+  s_adb8b4a94100e1::t_c4cd6a87cc0d42 523-528
+  ai_agent 538
+  s_adb8b4a94100e1::t_4b63c3ced98c85 547-557,980-981,1000-1006
+docs/content/changelog/upcoming/state-timeline-context-menu.md
+  s_adb8b4a94100e1::t_7b1ff8bd4b3b9b 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "e2f152f19490ad81e9d80bd9ab8110536709aeae",
+  "prompts": {},
+  "sessions": {
+    "s_adb8b4a94100e1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f594ce7-0618-4978-9448-86f62ae2325a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jeremy Leibs <jeremy.leibs@genesis-ai.company>"
+    }
+  }
+}
