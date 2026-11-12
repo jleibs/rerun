@@ -1,0 +1,46 @@
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_tooltip_long_label.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/tests/integration/main.rs
+  s_adb8b4a94100e1::t_e94ddd4d0d25bb 9
+crates/views/re_view_state_timeline/tests/integration/time_cursor.rs
+  s_adb8b4a94100e1::t_e94ddd4d0d25bb 1-103
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_tooltip_short_label.png
+  ai_agent 2-3
+docs/content/changelog/upcoming/state-timeline-time-selection.md
+  ai_agent 2,7,9-10
+crates/views/re_view_state_timeline/tests/snapshots/help_view_state_timeline_view_mac.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_pan_before_data.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/tests/snapshots/help_view_state_timeline_view_windows.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_pan_before_data_ending_in_clear.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_pan_past_data.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_tooltip_narrow_viewport.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/src/view_class.rs
+  s_adb8b4a94100e1::t_04c303dabd99d0 362-364,497
+  s_adb8b4a94100e1::t_42927be0c50df2 103-104,111,315,494-496,523,526,599-608
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_zoom_after.png
+  ai_agent 2-3
+crates/views/re_view_state_timeline/tests/snapshots/state_timeline_tooltip_ongoing.png
+  ai_agent 2-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "60f799f94e74c41bdb4e9cd376cf34ad2725b45a",
+  "prompts": {},
+  "sessions": {
+    "s_adb8b4a94100e1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f594ce7-0618-4978-9448-86f62ae2325a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jeremy Leibs <jeremy.leibs@genesis-ai.company>"
+    }
+  }
+}
